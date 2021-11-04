@@ -1,3 +1,10 @@
+// TODO : add multiplier for quantity
+// TODO : change backend req
+// Add safe not a NaN for quantity in backend
+// TODO : upgrade form of objects in send req front + back
+// TODO: add support for non-food discount
+// TODO: remove types "any"
+
 {
   "articles": {
     "isFood": [
@@ -40,3 +47,35 @@
   "discountPercentageFood": 15,
   "discountPercentageNotFood": 13
 }
+
+
+[
+  [
+      {
+          "articleName": "articlename 1",
+          "price": 10.1,
+          "VAT": "B",
+          "isFood": true
+      },
+      {
+          "articleName": "articlename 2",
+          "price": 20.2,
+          "VAT": "D",
+          "isFood": false
+      }
+  ],
+  {
+      "discountFood": 0
+  },
+  {
+      "discountNotFood": 0
+  }
+]
+
+[
+  {
+      "articleName": "",
+      "articleFinalPrice2decim": 0,
+      "index": 0
+  }
+]

@@ -4,19 +4,14 @@ export interface IArticlesIsFoodOrNot {
   price: number;
   quantity: number;
   VATType: "B" | "D";
+  isFood: boolean;
+  index: number;
 }
 
-export interface Igeneral {
-  articles: IArticlesIsFoodOrNot[];
-  total?: string;
-  discountPercentageFood: number;
-  discountPercentageNotFood: number;
-}
-
-export interface IrequestCustom {
-  itemsinTicket: IArticlesIsFoodOrNot[];
-  general: Igeneral;
-}
+// export interface IrequestCustom {
+//   itemsinTicket: IArticlesIsFoodOrNot[];
+//   general: Igeneral;
+// }
 
 export interface Iresponse {
   articleName: string;
@@ -25,17 +20,16 @@ export interface Iresponse {
 
 const ticketController = {
   count: async (req: Request, res: Response): Promise<void> => {
-    const { articles, discountPercentageFood, discountNotFood } = req.body;
-    const articlesFood: IArticlesIsFoodOrNot[] = articles.isFood;
-    const articlesNotFood = articles.isNotFood;
-    console.log(articlesFood);
+    const articles: IArticlesIsFoodOrNot[] = req.body.data[0];
+    const discountFood: number = req.body.data[1].discountFood;
+    const discountNotFood: number = req.body.data[2].discountNotFood;
 
     const customResponse = [];
 
     let finalGlobalPrice: number = 0;
-    const articlesFoodFinal: IArticlesIsFoodOrNot[] = articlesFood;
+    const articlesFoodFinal: IArticlesIsFoodOrNot[] = articles;
 
-    for (let i = 0; i < articlesFood.length; i++) {
+    for (let i = 0; i < articles.length; i++) {
       // Round + percentage
       const toFixedNumberPlusPercentage = (num: number, coef: number) => {
         return (num * coef) / 100;
@@ -47,17 +41,18 @@ const ticketController = {
         return Number(Math.round(value + "e" + decimals) + "e-" + decimals);
       };
 
-      console.log("Article price : ", articlesFood[i].price);
+      console.log("Article price : ", articles[i].price);
       // Deducating discount from HT Price
+
       const discount = toFixedNumberPlusPercentage(
-        articlesFood[i].price,
-        discountPercentageFood
+        articles[i].price,
+        discountFood
       );
-      const HTMinusDiscount = articlesFood[i].price - discount;
+      const HTMinusDiscount = articles[i].price - discount;
       console.log("discount", discount);
       console.log("HTMinusDiscount", HTMinusDiscount);
       //Last + VAT
-      const VAT = articlesFood[i].VATType === "B" ? 5.5 : 20;
+      const VAT = articles[i].VATType === "B" ? 5.5 : 20;
       const VATAmount: number = (HTMinusDiscount * VAT) / 100;
       const articleFinalPriceRaw = HTMinusDiscount + VATAmount;
       const articleFinalPrice4decim = round(articleFinalPriceRaw, 4);
@@ -68,8 +63,9 @@ const ticketController = {
 
       // Assigning final price
       const tempResponse = {
-        articleName: articlesFood[i].articleName,
+        articleName: articles[i].articleName,
         articleFinalPrice2decim,
+        index: articles[i].index,
       };
       customResponse.push(tempResponse);
 
@@ -78,6 +74,7 @@ const ticketController = {
 
     console.log("articlesFoodFinal", articlesFoodFinal);
     console.log(finalGlobalPrice);
+    // console.log(req.body);
     res.json(customResponse);
   },
 };
