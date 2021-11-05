@@ -44,11 +44,17 @@ const ticketController = {
       console.log("Article price : ", articles[i].price);
       // Deducating discount from HT Price
 
-      const discount = toFixedNumberPlusPercentage(
-        articles[i].price,
-        discountFood
-      );
-      const HTMinusDiscount = articles[i].price - discount;
+      const priceTimesQuantity = articles[i].price * articles[i].quantity;
+
+      const discount = articles[i].isFood
+        ? toFixedNumberPlusPercentage(priceTimesQuantity, discountFood)
+        : toFixedNumberPlusPercentage(priceTimesQuantity, discountNotFood);
+
+      // const discount = toFixedNumberPlusPercentage(
+      //   articles[i].price,
+      //   discountFood
+      // );
+      const HTMinusDiscount = priceTimesQuantity - discount;
       console.log("discount", discount);
       console.log("HTMinusDiscount", HTMinusDiscount);
       //Last + VAT

@@ -1,8 +1,5 @@
 // TODO : add multiplier for quantity
-// TODO : change backend req
-// Add safe not a NaN for quantity in backend
 // TODO : upgrade form of objects in send req front + back
-// TODO: add support for non-food discount
 // TODO: remove types "any"
 
 {
