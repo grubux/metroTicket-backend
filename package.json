@@ -4,9 +4,9 @@
   "description": "## Steps",
   "main": "server.js",
   "scripts": {
-    "build": "tsc && node build/server.js",
+    "build": "tsc",
     "start-dev": "ts-node-dev --respawn server.ts",
-    "start": "node build/server.js",
+    "start": "node ./build/server.js",
     "lint": "eslint . "
   },
   "author": "",
